@@ -1,0 +1,43 @@
+1751. Maximum Number of Events That Can Be Attended II
+
+/QUESTION/
+You are given an array of events where events[i] = [startDayi, endDayi, valuei]. 
+The ith event starts at startDayi and ends at endDayi, and if you attend this event,
+you will receive a value of valuei. You are also given an integer k which represents
+the maximum number of events you can attend.
+
+You can only attend one event at a time.
+If you choose to attend an event, you must attend the entire event.
+Note that the end day is inclusive: that is, you cannot attend two
+events where one of them starts and the other ends on the same day.
+
+/SOLUTION/
+The first approach that comes to my mind is by using recursion. Simply ignoring for a case or taking 
+it and going ahead.
+
+In the optimized approach memoization was used in order or tackle the common cases.
+
+
+/C++ CODE/
+int solve(vector<vector<int>>&events, int k,int index,vector<vector<int>>&dp)
+    {
+        if(index>=events.size() or k==0)return 0;
+        if(dp[index][k]!=-1)return dp[index][k];
+        int ans = 0;
+        int temp;
+        ans +=events[index][2];
+        for(int i=index+1;i<events.size();i++)
+        {
+            if(events[index][1]<events[i][0])
+            {
+                temp = i;
+                break;
+            }
+        }
+        return dp[index][k]=max(ans+solve(events,k-1,temp,dp),solve(events,k,index+1,dp));
+    }
+    int maxValue(vector<vector<int>>& events, int k) {
+        vector<vector<int>>dp(events.size(),vector<int>(k+1,-1));
+        sort(events.begin(),events.end());
+        return solve(events,k,0,dp);
+    }
