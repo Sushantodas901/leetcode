@@ -1,0 +1,46 @@
+/QUESTION/
+Given the head of a linked list, remove the nth node from the end of the list and return its head.
+
+/SOLUTION/
+/FIRST APPROACH/
+
+So the first thing that comes to my mind is to tarverse the whole linked list and count the number of 
+nodes.
+Then the node from start would be length of the list - n +1;
+so this is the first method;
+
+/CODE IMPLEMENTATION/
+
+int helper(ListNode *temp)
+    {
+        int count = 0;
+        while(temp)
+        {
+            temp = temp->next;
+            count++;
+        }
+        return count;
+    }
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+    int Length = helper(head);
+    int nodeFromBeginning = Length - n + 1;
+    ListNode* prev = NULL;
+    ListNode* temp = head;
+    for (int i = 1; i < nodeFromBeginning; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+    if (prev == NULL) {
+        head = head->next;
+        return head;
+    }
+
+        prev->next = prev->next->next;
+        return head;
+    
+    }
+
+/ANOTHER APPROACH/
+
+IN this what we could do is reverse the linked list then remove the nth node and return the reversed
+linked list after reversing it again.
