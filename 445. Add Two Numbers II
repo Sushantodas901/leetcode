@@ -1,0 +1,110 @@
+/QUESTION/
+
+You are given two non-empty linked lists representing two non-negative integers.
+The most significant digit comes first and each of their nodes contains a single digit.
+Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+/FIRST APPROACH ALSO THE OPTIMAL APPROACH/
+
+Basically what we do in this is we first reverse the linked lists. Then we add the two numbers
+as we do in long integers. After that we simply make a new linked list and reverse it too. And 
+simply return it's head.
+
+ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        //firstly reversing the lists
+        ListNode *current=l1,*prev=NULL,*next=NULL;
+        while(current!=NULL)
+        {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        l1 = prev;
+        current = l2;
+        prev = NULL;
+        next = NULL;
+        while(current!=NULL)
+        {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        l2 = prev;
+        int sum = 0;
+        int carry = 0;
+        // ListNode *temp = l1;
+        // ListNode *temp2 = l2;
+        ListNode *newList = new ListNode();
+        ListNode *head = newList;
+        while(l1!=NULL and l2!=NULL)
+        {
+            
+            sum = l1->val + l2->val + carry;
+            int digit = sum%10;
+            carry = sum/10;
+            //  cout<<sum<<endl;
+            ListNode *temp1 = new ListNode(digit);
+            newList->next = temp1;
+            // cout<<newList->val;
+            l1=l1->next;
+            l2=l2->next;
+            newList = newList->next;
+        }
+        while(l1!=NULL)
+        {
+            sum = l1->val + carry;
+            int digit= sum%10;
+            carry = sum/10;
+           
+            ListNode *temp1 = new ListNode(digit);
+            newList->next = temp1;
+            newList = newList->next;
+            l1 = l1->next;
+        }
+        // ListNode *tempa = l2;
+        // while(tempa){
+        //     cout<<tempa->val<<" ";
+        //     tempa = tempa->next;
+        // }
+        while(l2!=NULL)
+        {
+            // cout<<"insdie";
+            sum = l2->val + carry;
+            int digit= sum%10;
+            carry = sum/10;
+            ListNode *temp1 = new ListNode(digit);
+            newList->next = temp1;
+            // cout<<newList->val;
+            newList = newList->next;
+            l2 = l2->next;
+        }
+        if(carry)
+        {
+            ListNode* temp1 = new ListNode(carry);
+            newList->next = temp1;
+            newList = newList->next;
+        }
+        current=head->next;
+        prev=NULL;
+        next=NULL;
+        while(current!=NULL)
+        {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+        return head;
+    }
+
+
+/APPROACH2/ /USING STACK/
+
+In this approach we store the lists in stacks. Then one by one we keep adding the elements
+similar to the long integers. And store the results in a new List. Then return the head.
+It's quite easy to implement.
