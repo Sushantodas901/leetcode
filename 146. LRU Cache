@@ -1,0 +1,86 @@
+/QUESTION/
+Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
+
+Implement the LRUCache class:
+
+LRUCache(int capacity) Initialize the LRU cache with positive size capacity.
+int get(int key) Return the value of the key if the key exists, otherwise return -1.
+void put(int key, int value) Update the value of the key if the key exists.
+Otherwise, add the key-value pair to the cache. If the number of keys exceeds
+the capacity from this operation, evict the least recently used key.
+The functions get and put must each run in O(1) average time complexity.
+
+/SOLUTION/
+SINCE THIS IS IMPLEMENTATION OF A PARTICULAR CLASS OR LOGIC THERE IS NOT ANY OPTIMAL 
+APPROACH OR SOMETHING.
+So the c++ code is below
+/C++ CODE IMPLEMENTATION/
+
+struct DoubleNode{
+    public:
+    int key, val;
+    DoubleNode* next;
+    DoubleNode* prev;
+    DoubleNode(int key, int val){
+        this->key = key;
+        this->val = val;
+        prev= nullptr;
+        next = nullptr;
+    }
+};
+
+
+class LRUCache {
+public:
+    int capacity;
+    unordered_map<int, DoubleNode*> dic;
+    DoubleNode* left;
+    DoubleNode* right;
+    LRUCache(int capacity) {
+        this->capacity = capacity;
+        left = new DoubleNode(-1,-1);
+        right = new DoubleNode(-1,-1);
+        left->next = right;
+        right->prev = left;
+    }
+    
+    int get(int key) {
+        if (dic.find(key)!=dic.end()){
+            remove(dic[key]);
+            insert(dic[key]);
+            return dic[key]->val;
+        }
+        return -1;
+    }
+
+    
+    void put(int key, int value) {
+        if (dic.find(key)!= dic.end()){
+            remove(dic[key]);
+        }
+        dic[key] = new DoubleNode(key,value);
+        insert(dic[key]);
+
+        if (dic.size()>capacity){
+            DoubleNode* lru = left->next;
+            remove(lru);
+            dic.erase(lru->key);
+        }
+    }
+
+    void remove(DoubleNode* node){
+        DoubleNode* prevnode = node->prev;
+        DoubleNode* nextnode = node->next;
+        prevnode->next = nextnode;
+        nextnode->prev = prevnode;
+    }
+
+    void insert(DoubleNode* node){
+        DoubleNode* prevnode = right->prev;
+        DoubleNode* nextnode=  right;
+        prevnode->next = node;
+        node->prev=  prevnode;
+        node->next = nextnode;
+        nextnode->prev = node;
+    }
+};
