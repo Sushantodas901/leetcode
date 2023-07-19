@@ -1,0 +1,39 @@
+/QUESTON/
+Given an array of intervals intervals where
+intervals[i] = [starti, endi], return the minimum number
+of intervals you need to remove to make the
+rest of the intervals non-overlapping.
+
+/INTUITION AND THE ONLY APPROACH I KNOW/
+I checked the discussion section and got to know the idea of
+using greedy.
+So the intuition is to first sort the intervals on the basis of their start.
+Then using greedy. Or simply first take an interval, let's say previous.
+And start checking with other intervals let's say current
+1.if the previous interval end is greater than current's start then we
+increase the count. Inside that same if block we check whether the previous'
+end is also bigger than current's end. if so then change previous to current;
+2.Else we update the previous to current;
+
+/C++ CODE IMPLEMENTATION/
+int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+    if (intervals.size() <= 1) return 0;
+
+    int overlappingCount = 0;
+    sort(intervals.begin(),intervals.end());
+    
+    vector<int> previousInterval = intervals[0];
+    for (int i = 1; i < intervals.size(); i++) {
+        vector<int> currentInterval = intervals[i];
+        if (previousInterval[1] > currentInterval[0]) {
+            overlappingCount++;
+
+            if (previousInterval[1] > currentInterval[1]) {
+                previousInterval = currentInterval;
+            }
+        } else {
+            previousInterval = currentInterval;
+        }
+    }
+    return overlappingCount;
+}
