@@ -1,0 +1,61 @@
+/QUESTION/
+We are given an array asteroids of integers representing asteroids in a row.
+For each asteroid, the absolute value represents
+its size, and the sign represents its direction 
+(positive meaning right, negative meaning left).
+Each asteroid moves at the same speed.
+
+Find out the state of the asteroids after all collisions. 
+If two asteroids meet, the smaller one will explode. 
+If both are the same size, both will explode. Two asteroids 
+moving in the same direction will never meet.
+
+/APPROACH/
+
+I traversed the array element by element and whenever i find a negative i put it into the stack there will be three cases
+
+A flag is assigned true at the start of each loop;
+case1. If the element is positive then we just push it into the stack and continue.
+case2. If the element is negative then we run a another loop the condition of which is
+  the top is a positive element, the stack is not empty.
+    /INSIDE THE LOOP/
+    1.If  the mod of top is greater than the negative element we break out of the loop and also change the flag.
+    2.If both the top and negative element are equal than we pop and break out of the loop , change the flag.
+    3.If negative is greater than we simply pop and continue the loop and start from 1.
+Lastly we check if the flag is true then add the element to stack.
+Otherwise not.
+
+/C++ CODE IMPLEMENTATION/
+vector<int> asteroidCollision(vector<int>& asteroids) {
+        stack<int> s;
+        for(int i:asteroids)
+        {
+            bool flag = true;
+            while(!s.empty() and s.top()>=0 and i<0)
+            {
+                int temp = s.top()+i;
+                if(temp==0){
+                    s.pop();
+                    flag = false;
+                    break;
+                }
+                else if(temp<0)
+                {
+                    s.pop();
+                }
+                else
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag)s.push(i);
+        }
+        vector<int> ans(s.size());
+        for(int i=s.size()-1;i>=0;i--)
+        {
+            ans[i] = s.top();
+            s.pop();
+        }
+        return ans;
+    }
