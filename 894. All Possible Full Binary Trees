@@ -1,0 +1,41 @@
+/QUESTION/
+Given an integer n, return a list of all possible full binary trees with n nodes.
+Each node of each tree in the answer must have Node.val == 0.
+Each element of the answer is the root node of one possible tree.
+You may return the final list of trees in any order.
+A full binary tree is a binary tree where each node has exactly 0 or 2 children.
+
+/INTUITION/
+
+/C++ CODE IMPLEMENTATION/
+vector<TreeNode*> allPossibleFBT(int n) {
+        // Base case: n is even or less than 1, return an empty vector
+        if (n == 0 || n % 2 == 0) {
+            return {};
+        }
+        
+        // Base case: n is 1, return a vector with a single tree with one node
+        if (n == 1) {
+            return { new TreeNode(0) };
+        }
+        
+        vector<TreeNode*> result;
+        // Try all possible combinations of left and right subtree sizes
+        for (int leftSize = 1; leftSize < n - 1; leftSize += 2) {
+            int rightSize = n - 1 - leftSize;
+            vector<TreeNode*> leftSubtrees = allPossibleFBT(leftSize);
+            vector<TreeNode*> rightSubtrees = allPossibleFBT(rightSize);
+            
+            // Generate all combinations of left and right subtrees
+            for (TreeNode* leftSubtree : leftSubtrees) {
+                for (TreeNode* rightSubtree : rightSubtrees) {
+                    TreeNode* root = new TreeNode(0);
+                    root->left = leftSubtree;
+                    root->right = rightSubtree;
+                    result.push_back(root);
+                }
+            }
+        }
+        
+        return result;
+    }
