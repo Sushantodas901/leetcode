@@ -1,0 +1,17 @@
+/QUESTION/
+Given an array nums of distinct integers, return all the possible permutations. 
+You can return the answer in any order.
+
+/C++ CODE IMPLEMENTATION/
+ vector<vector<int>> permute(vector<int>& nums) {
+        vector<int> temp = nums;
+        vector<vector<int>>ans;
+        ans.push_back(nums);
+        next_permutation(nums.begin(),nums.end());
+        while(nums!=temp)
+        {
+            ans.push_back(nums);
+            next_permutation(nums.begin(),nums.end());
+        }
+        return ans;
+    }
