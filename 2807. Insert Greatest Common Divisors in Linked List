@@ -1,0 +1,29 @@
+/QUESTION/
+Given the head of a linked list head, in which each node contains an integer value.
+Between every pair of adjacent nodes, insert a new node with a value equal to the greatest common divisor of them.
+Return the linked list after insertion.
+The greatest common divisor of two numbers is the largest positive integer that evenly divides both numbers.
+
+/INTUITION/
+Simply take the head of the list and store it in a var then check if the next node is present or not.
+In case if it is not present then return the head.
+Else run a loop till the next of the list is empty or NULL. 
+Then for each find the gcd of the current and next data. And concurrently create a new node and do the 
+proper linkage till the loop runs.
+
+/C++ CODE IMPLEMENTATION/
+ListNode* insertGreatestCommonDivisors(ListNode* head) {
+        ListNode *temp = head;
+        if(!head->next)return head;
+        ListNode *curr = head->next;
+        while(curr != NULL)
+        {
+            int x1 = gcd(temp->val,curr->val);
+            ListNode *newnode = new ListNode(x1);
+            newnode->next = curr;
+            temp->next = newnode;
+            temp = curr;
+            curr = temp->next;
+        }
+        return head;
+    }
