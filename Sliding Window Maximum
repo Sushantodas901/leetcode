@@ -1,0 +1,29 @@
+/QUESTION/
+You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. 
+You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+Return the max sliding window.
+
+/C++ CODE IMPLEMENTATION/
+ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    map<int,int>mp;
+    priority_queue<int>p;
+    for(int i=0;i<k-1;i++)
+    {
+        p.push(nums[i]);
+        mp[nums[i]]++;
+    }
+    vector<int>ans;
+    for(int i=0,j=k-1;j<nums.size();j++)
+    {
+        mp[nums[j]]++;
+        p.push(nums[j]);
+        while(mp[p.top()]==0)
+        {
+          p.pop();
+        }
+        mp[nums[i]]--;
+        ans.push_back(p.top());
+        i++;
+      }
+    return ans;
+    }
