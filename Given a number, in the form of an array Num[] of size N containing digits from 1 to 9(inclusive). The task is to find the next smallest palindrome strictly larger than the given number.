@@ -1,0 +1,43 @@
+/QUESTION/
+Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+
+The distance between two adjacent cells is 1.
+
+/C++ CODE IMPLEMENTATION/
+vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int n = mat.size();
+        int m = mat[0].size();
+        vector<vector<int>> ans(n,vector<int>(m,0));
+        queue<pair<int,int>>temp;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(mat[i][j]==0)
+                temp.push({i,j});
+                else mat[i][j] = -1;
+            }
+        }
+        int dx[] = {1,0,-1,0};
+        int dy[] = {0,1,0,-1};
+        while(!temp.empty())
+        {
+            pair<int,int> curr = temp.front();
+            temp.pop();
+            int old_left = curr.first;
+            int old_right = curr.second;
+            for(int i=0;i<4;i++)
+            {
+                int curr_left = old_left+dx[i];
+                int curr_right = old_right+dy[i];
+                if(curr_left <0 or curr_right<0 or curr_left>=n or curr_right>=m or mat[curr_left][curr_right]!=-1)continue;
+                
+                mat[curr_left][curr_right] =1+mat[old_left][old_right];
+                temp.push({curr_left,curr_right});
+                
+            }
+            
+        }
+        return mat;
+
+    }
