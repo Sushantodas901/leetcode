@@ -1,0 +1,59 @@
+/QUESTION/
+Given an array of strings words and a width maxWidth, format the text such that each line has exactly maxWidth characters
+and is fully (left and right) justified.
+
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' 
+when necessary so that each line has exactly maxWidth characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide
+evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+For the last line of text, it should be left-justified, and no extra space is inserted between words.
+/C++ CODE IMPLEMENTATION/
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+    vector<string> result;
+    vector<string> line;
+    int line_length = 0;
+
+    for (const string& word : words) {
+        if (line_length + line.size() + word.length() <= maxWidth) {
+            line.push_back(word);
+            line_length += word.length();
+        } else {
+            result.push_back(line[0]);
+            if (line.size() == 1) {
+                result.back() += string(maxWidth - line_length, ' ');
+            } else {
+                int spaces_needed = maxWidth - line_length;
+                int gaps = line.size() - 1;
+                int spaces_between_words = spaces_needed / gaps;
+                int extra_spaces = spaces_needed % gaps;
+                
+                for (int i = 1; i < line.size(); ++i) {
+                    if (extra_spaces > 0) {
+                        result.back() += string(spaces_between_words + 1, ' ') + line[i];
+                        --extra_spaces;
+                    } else {
+                        result.back() += string(spaces_between_words, ' ') + line[i];
+                    }
+                }
+            }
+            
+            line.clear();
+            line.push_back(word);
+            line_length = word.length();
+        }
+    }
+
+    string last_line = line[0];
+    for (int i = 1; i < line.size(); ++i) {
+        last_line += " " + line[i];
+    }
+    last_line += string(maxWidth - last_line.length(), ' ');
+    result.push_back(last_line);
+
+    return result;
+}
+};
