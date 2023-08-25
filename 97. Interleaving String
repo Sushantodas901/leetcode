@@ -1,0 +1,32 @@
+/QUESTION/
+Given strings s1, s2, and s3, find whether s3 is formed by an interleaving of s1 and s2.
+
+An interleaving of two strings s and t is a configuration where s and t are divided into n and m 
+substrings
+ respectively, such that:
+/C++ CODE IMPLEMENTATION/
+
+int solve(string &s1,string &s2,string &s3,int i,int j,vector<vector<int>>&dp)
+    {
+        if(i==s1.size() and j==s2.size())
+        {
+            return true;
+        }
+        if(dp[i][j]!=-1)return dp[i][j];
+        bool first = false;
+        bool second = false;
+        if(i<s1.size() and s1[i]==s3[i+j])
+        {
+            first = solve(s1,s2,s3,i+1,j,dp);
+        }
+        if(j<s2.size() and s2[j]==s3[i+j])
+        {
+            second = solve(s1,s2,s3,i,j+1,dp);
+        }
+        return dp[i][j] = first || second;
+    }
+    bool isInterleave(string s1, string s2, string s3) {
+        if(s1.size()+s2.size()!=s3.size())return false;
+        vector<vector<int>>dp(s1.size()+1,vector<int>(s2.size()+1,-1));
+        return solve(s1,s2,s3,0,0,dp);
+    }
