@@ -1,0 +1,38 @@
+/QUESTION/
+You are given a 0-indexed string s and a dictionary of words dictionary.
+You have to break s into one or more non-overlapping substrings such that each substring is present in dictionary.
+There may be some extra characters in s which are not present in any of the substrings.
+Return the minimum number of extra characters left over if you break up s optimally.
+
+/C++ CODE IMPLEMENTATION/
+vector<int> dp;
+    int n;
+    int f(int i, string& s, vector<string>& dictionary) {
+
+        if (i == n)     
+            return 0;
+
+        if (dp[i]!= -1) 
+            return dp[i]; 
+
+        int ans = n; 
+
+        for (string& w : dictionary) {
+            int wLen = w.size();
+            if (i+wLen <= s.size() && s.substr(i, wLen) == w) {
+                int extra = f(i+wLen, s, dictionary);
+                ans = min(ans, extra);
+            }
+        }
+        
+        int noWord = 1 + f(i+1, s, dictionary);
+        ans = min(ans, noWord);
+        return dp[i]=ans;
+    }
+
+    int minExtraChar(string s, vector<string>& dictionary) {
+
+        n=s.size();
+        dp.assign(n, -1); 
+        return f(0, s, dictionary);
+    }
