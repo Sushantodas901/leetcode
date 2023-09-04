@@ -1,0 +1,108 @@
+/QUESTION/
+Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++'s atoi function).
+
+The algorithm for myAtoi(string s) is as follows:
+
+Read in and ignore any leading whitespace.
+Check if the next character (if not already at the end of the string) is '-' or '+'. Read this character in if it is either. This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.
+Read in next the characters until the next non-digit character or the end of the input is reached. The rest of the string is ignored.
+Convert these digits into an integer (i.e. "123" -> 123, "0032" -> 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).
+If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then clamp the integer so that it remains in the range. Specifically, integers less than -231 should be clamped to -231, and integers greater than 231 - 1 should be clamped to 231 - 1.
+Return the integer as the final result.
+Note:
+
+Only the space character ' ' is considered a whitespace character.
+Do not ignore any characters other than the leading whitespace or the rest of the string after the digits.
+
+/INTUITION/
+First of all there are some points missing in these .
+There will be cases where there are leading zeros and then a - sign and number.
+In that case the answer should be zero. Now this is pretty simple if you are correctly thinking the logic but in my case i was thinking different.
+
+So the logic is pretty simple.
+1.Increment index till there are no whitespaces left,
+2.If there is any sign be it + or minus set a flag,
+3.Now iterate till any non_digit is encountered. and simultaneously keep on adding it to the number .
+4. As soon as the number gets bigger than INT_MAX or smaller than INT_MIN return accordingly.
+5.Lastly return the number.
+
+there are two codes for this 
+mine//
+/C++ CODE Chatgpt/
+int myAtoi(string s) {
+        int i = 0;
+        int sign = 1;
+        long long result = 0;
+
+        // Skip leading whitespace
+        while (i < s.size() && s[i] == ' ') {
+            i++;
+        }
+
+        // Check for optional sign character
+        if (i < s.size() && (s[i] == '+' || s[i] == '-')) {
+            sign = (s[i] == '-') ? -1 : 1;
+            i++;
+        }
+
+        // Process digits
+        while (i < s.size() && isdigit(s[i])) {
+            result = result * 10 + (s[i] - '0');
+
+            // Check for integer overflow
+            if (result * sign < INT_MIN) {
+                return INT_MIN;
+            } else if (result * sign > INT_MAX) {
+                return INT_MAX;
+            }
+
+            i++;
+        }
+
+        return static_cast<int>(result * sign);
+    }
+
+//MINE??
+class Solution {
+public:
+    int myAtoi(string s) {
+        vector<int> temp;
+        bool aflag = false;
+        int i=0;
+        int myflag = false;
+        while (i < s.size()) {
+        char c = s[i];
+
+        if (!myflag && (c == '+' || c == '-')) {
+            aflag = (c == '-');
+            myflag = true;
+        } else if (isdigit(c)) {
+            temp.push_back(c - '0');
+            myflag = true;
+        } else if (!myflag && c == ' ') {
+        } else {
+            break;
+        }
+        i++;
+        }
+        for(auto i:temp)cout<<i<<" ";
+        // int mod = 1e9;
+        long long ans = 0;
+  
+        for(auto it:temp)
+        {
+            ans = ans*10+it;
+            // ans = ans % mod;
+            if(ans > INT_MAX ){
+                if(aflag)
+                return -1*INT_MAX-1;
+                return INT_MAX;
+            }
+        }
+        // ans %= mod;
+        if(aflag){
+            return -1*ans;
+        };
+        return ans;
+    }
+};
