@@ -1,0 +1,41 @@
+/QUESTION/
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0
+Notice that the solution set must not contain duplicate triplets.
+
+/C++ CODE IMPELMENTATION/
+vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> ans;
+        int n = nums.size();
+        for(int i=0;i<n-2;i++){
+            if(nums[i] > 0 )break;
+            if(i>0 && nums[i]==nums[i-1])continue;
+            int left = i+1;
+            int right = n-1;
+            int target = -1*nums[i];
+            
+            while(left < right ){
+                if(nums[left]+nums[right] == target){
+                    ans.push_back({nums[i],nums[left],nums[right]});
+                    left++;
+                    right--;
+                    while(left < right && nums[left]==nums[left-1]){
+                    left++;
+                    }
+                    while(left < right && nums[right]==nums[right+1]){
+                        right--;
+                    }
+                }
+                else if(nums[left]+nums[right] < target){
+                    left++;
+                }
+                else
+                {
+                    right--;
+                }
+                
+            }
+        }
+        return ans;
+    }
+};
