@@ -4,9 +4,6 @@ public:
         int sum  =0 ;
         int count = 1;
         for(int i=0;i<nums.size();i++){
-            if(nums[i] > target){
-                return false;
-            }
             sum+=nums[i];
             if(sum > target){
                 sum = nums[i];
@@ -27,7 +24,7 @@ public:
                 right = middle;
             }
             else{
-                left = middle+1;
+                left = middle + 1;
             }
         }
         return left;
